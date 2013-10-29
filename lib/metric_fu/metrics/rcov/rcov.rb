@@ -1,5 +1,6 @@
 MetricFu.lib_require { 'utility' }
 MetricFu.lib_require { 'calculate' }
+MetricFu.data_structures_require { 'line_numbers' }
 
 module MetricFu
 
@@ -45,6 +46,7 @@ module MetricFu
     end
 
     def default_command
+      require 'rake'
       reset_output_location
       test_files = FileList[*options[:test_files]].join(' ')
       rcov_opts = options[:rcov_opts].join(' ')
