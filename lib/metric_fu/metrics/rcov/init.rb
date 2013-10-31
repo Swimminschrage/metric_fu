@@ -6,11 +6,12 @@ module MetricFu
     end
 
     def default_run_options
-      { :environment => 'test',
-                    :test_files =>  Dir['{spec,test}/**/*_{spec,test}.rb'],
-                    :rcov_opts => rcov_opts,
-                    :external => nil
-                  }
+      {
+        :environment => 'test',
+        :test_files =>  Dir['{spec,test}/**/*_{spec,test}.rb'],
+        :rcov_opts => rcov_opts,
+        :external => nil,
+      }
     end
 
     def has_graph?
@@ -18,14 +19,23 @@ module MetricFu
     end
 
     def enable
-      MetricFu.configuration.mf_debug("rcov is not available. See README")
+      if external_coverage_file
+        super
+      else
+        MetricFu.configuration.mf_debug("RCov is not available. See README")
+      end
     end
 
     def activate
       super
     end
 
+    def external_coverage_file
+      run_options.fetch(:external) { nil }
+    end
+
     private
+
 
     def rcov_opts
       rcov_opts = [

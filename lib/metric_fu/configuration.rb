@@ -103,22 +103,11 @@ module MetricFu
     def configure_metrics
       MetricFu::Io::FileSystem.set_directories
       MetricFu::Metric.metrics.each do |metric|
-        if block_given?
-          yield metric
-        elsif !metric_manually_configured?(metric)
-          metric.enabled = false
-          metric.enable
-        end
+        yield metric if block_given?
+        metric.enabled = false
+        metric.enable
         metric.activate if metric.enabled unless metric.activated
       end
-    end
-
-    # TODO: Remove this method.  If we run configure_metrics
-    #   and it disabled rcov, we shouldn't have to worry here
-    #   that rcov is a special case that can only be enabled
-    #   manually
-    def metric_manually_configured?(metric)
-      [:rcov].include?(metric.name)
     end
 
     # TODO: Reconsider method name/behavior, as it really adds a formatter

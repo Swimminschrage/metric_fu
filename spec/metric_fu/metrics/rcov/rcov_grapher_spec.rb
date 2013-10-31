@@ -1,4 +1,6 @@
 require "spec_helper"
+require 'yaml'
+MetricFu.metrics_require { 'rcov/rcov_grapher' }
 
 describe RcovGrapher do
   before :each do
