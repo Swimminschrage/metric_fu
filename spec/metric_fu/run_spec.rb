@@ -24,19 +24,13 @@ describe MetricFu do
 
     before do
 
-      # TODO: Should probably use some sort of fake metric
-      # to speed up tests. For now, just configuring with a
-      # limited set, so we can test the basic functionality
-      # without significantly slowing down the specs.
-      MetricFu.configuration.configure_metrics do |metric|
-        if metric.name == :churn
-          metric.enable
-          metric.activated = true
-          metric.should_receive(:run_external).and_return('')
-        else
-          metric.enabled = false
-        end
-      end
+      # stub metric_churn as only enabled metric and have it return ''
+      metric_churn = MetricFu::Metric.get_metric(:churn)
+      metric_churn.enable
+      metric_churn.activated = true
+      metric_churn.should_receive(:run_external).and_return('')
+      MetricFu::Metric.stub(:enabled_metrics).and_return([metric_churn])
+
 
     end
 
